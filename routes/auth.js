@@ -14,7 +14,7 @@ try{
      if(userExists)
       return (res.status(400).json({message:'User already Exists'}));
 
-     const hashedPassword= await bcrypt.hash (password,10)
+     const hashedPassword= await bcrypt.hash(password,10)
 
      //save user
      const user= await User.create({
@@ -34,6 +34,31 @@ try{
 }catch(error){
      res.status(500).json({ message: 'Server error', error: err.message });
 }
+})
+router.post('/login',async(req,res)=>{
+  try{
+    const {email,password}=req.body;
+
+    //checking user 
+    const user =await User.findOne({email})
+    if(!user)
+      return res.status(400).json({message:'invalid email or password'})
+    
+    const isMatch =await bcrypt.compare(password,user.password)
+    if(!isMatch)
+      return res.status(400).json({message:'invalid password  '})
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+
+  }catch(error){
+  console.log("Error while login",error)
+  }
 })
 
 // Generate JWT
