@@ -15,6 +15,8 @@ app.use(cors());
 //ROUTES
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/products',require('./routes/product'))
+app.use('/api/cart', require('./routes/cart'));
+
 
 const PORT=process.env.PORT|| 5000
 

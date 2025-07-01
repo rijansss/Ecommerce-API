@@ -23,7 +23,6 @@ router.post('/',protect, async(req,res)=>{
   }
 });
 
-
 // Get all products
 
 router.get('/',async (req,res)=>{

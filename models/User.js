@@ -17,11 +17,30 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  isAdmin: {
+ 
+ isAdmin: {
     type: Boolean,
-    default: true,
+    default: false ,
   },
-}, { timestamps: true });
+ cart: [
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    },
+
+    quantity: {
+      type: Number,
+      default: 1
+    }
+  }
+]
+
+
+}, 
+
+{ timestamps: true });
 
 
 module.exports=mongoose.model("User",userSchema)
+ 
