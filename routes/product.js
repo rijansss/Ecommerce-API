@@ -87,5 +87,43 @@ router.delete('/:id', protect, isAdmin, async (req, res) => {
   }
 });
 
+//Adding product in wishlist
+router.post('/:id/wishlist',protect, async(req,res)=>{
+const product =await Product.findById(req.params.id);
+  if (!product) return res.status(404).json({ message: "Product not found" });
+   if (product.wishlistedBy.includes(req.user._id)) {
+    return res.status(400).json({ message: "Product already in wishlist" });
+  }
+
+  product.wishlistedBy.push(req.user._id);
+  await product.save();
+  res.json({ message: "Added to wishlist" });
+});
+
+
+//Deleting product from wishlist
+router.delete('/:id/wishlist', protect, async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) return res.status(404).json({ message: "Product not found" });
+   await Product.updateOne(
+  { _id: product._id },  // we are finding the product 
+  { $pull: { wishlistedBy: req.user._id } } // we are removing the product 
+    );
+
+  res.json({ message: "Removed from wishlist" });
+});
+
+//  Leave a product review
+router.post('/:id/reviews', protect, async (req, res) => {
+
+const { rating, comment } = req.body;
+const product = await Product.findById(req.params.id);
+
+ if (!product) return res.status(404).json({ message: "Product not found" });
+  // if product is already reviewed
+  
+})
+
+
 
 module.exports = router;
