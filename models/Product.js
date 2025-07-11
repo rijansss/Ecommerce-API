@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   } ,
-  reviews:[
+  reviews:[ 
       {
       user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: String,
@@ -20,10 +20,18 @@ const productSchema = new mongoose.Schema({
       comment: String
     }
   ],
-  numReviews: { type: Number, default: 0 },
+
+  numReviews: { type: Number, default: 0 },  //total number of reviews
       rating: { type: Number, default: 0 },
       wishlistedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
+
+
+//Getting wishList Products
+router.get('/wishlist', protect, async (req, res) => {
+  const products = await Product.find({ wishlistedBy: req.user._id });
+  res.json(products);
+});
 
 
 module.exports = mongoose.model('Product', productSchema);
