@@ -27,11 +27,7 @@ const productSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-//Getting wishList Products
-router.get('/wishlist', protect, async (req, res) => {
-  const products = await Product.find({ wishlistedBy: req.user._id });
-  res.json(products);
-});
+
 
 
 module.exports = mongoose.model('Product', productSchema);

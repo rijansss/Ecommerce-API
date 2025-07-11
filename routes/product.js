@@ -146,7 +146,11 @@ const product = await Product.findById(req.params.id);
 
 //Getting Wishlist
 
-router.get('/wishlist',protect,)
+router.get('/wishlist', protect, async (req, res) => {
+  const products = await Product.find({ wishlistedBy: req.user._id });
+  res.json(products);
+});
+
 
 
 module.exports = router;
