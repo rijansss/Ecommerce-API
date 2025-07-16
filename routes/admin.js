@@ -15,7 +15,6 @@ router.get('/orders', protect, isAdmin, async (req, res) => {
 
 
 
-
 router.get('/orders/user/:userId', protect, isAdmin, async (req, res) => {
   const orders = await Order.find({ user: req.params.userId }).populate('orderItems.product');
   res.json(orders);

@@ -3,7 +3,6 @@ const { protect } = require('../middleware/authMiddleware');
 const isAdmin = require('../middleware/adminMiddleware');
 const User = require('../models/User');
 const Order = require('../models/Order');
-
 const router = express.Router();
 
 //Placing Order 
@@ -30,6 +29,20 @@ const total = user.cart.reduce((sum,item)=>{
   await user.save();
 
   res.status(201).json({ message: 'Order placed', order });
+  
+  for (const item of order.orderItems) {
+  const product = await Product.findById(item.product);
+  if (product) {
+    // check stock before reducing
+    if (product.countInStock < item.quantity) {
+      return res.status(400).json({ message: `Not enough stock for ${product.name}` });
+    }
+
+    product.countInStock -= item.quantity;
+    await product.save();
+  }
+}
+
 });
 
 //getting all orders
