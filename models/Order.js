@@ -19,6 +19,15 @@ const orderSchema = new mongoose.Schema({
     type: Number, 
     required: true
   },
+   // Payment Related Fields
+  isPaid: { type: Boolean, default: false },
+  paidAt: Date,
+  paymentResult: {
+    id: String,        // transaction ID from Razorpay/Stripe
+    status: String,    // success/failure
+    update_time: String,
+    email_address: String
+  },
   status: {
     type: String,
     default: 'Pending',
