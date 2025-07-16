@@ -45,6 +45,8 @@ router.post("/", protect, async (req, res) => {
     }
   }
 });
+
+//Payment for Order
 router.put("/:id/pay", protect, async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (order) {
